@@ -1,0 +1,36 @@
+@import url('./reset.css');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		font-family:
+			'Pretendard',
+			-apple-system,
+			BlinkMacSystemFont,
+			system-ui,
+			Roboto,
+			'Helvetica Neue',
+			'Segoe UI',
+			'Apple SD Gothic Neo',
+			'Noto Sans KR',
+			'Malgun Gothic',
+			'Apple Color Emoji',
+			'Segoe UI Emoji',
+			'Segoe UI Symbol',
+			sans-serif;
+	}
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* 스크롤바 손잡이 꾸미기 */
+::-webkit-scrollbar-thumb {
+	background: #d4d3d3;
+	border-radius: 5px;
+}
