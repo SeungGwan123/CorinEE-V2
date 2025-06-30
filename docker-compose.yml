@@ -4,82 +4,80 @@ services:
   server:
     build:
       context: .
-      dockerfile: dockerfile-server
-    image: seunggwan/corinee-server
-    container_name: corinee_server_1
+      dockerfile: dockerfile-server-v2
+    image: seunggwan/corinee-server-v2
+    container_name: corinee_server_v2
     env_file:
       - .env
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
+      - DB_HOST=mysql-v2
+      - DB_PORT=3306
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=redis-v2
+      - REDIS_PORT=6379
     ports:
-      - "3000:3000"
+      - "3002:3000"
     depends_on:
-      - mysql
-      - redis
+      - mysql-v2
+      - redis-v2
     networks:
       - app-network
 
   client:
     build:
       context: .
-      dockerfile: dockerfile-client
+      dockerfile: dockerfile-client-v2
       args:
         - VITE_API_BASE_URL=${VITE_API_BASE_URL}
-    image: seunggwan/corinee-client
-    container_name: corinee_client_1
+    image: seunggwan/corinee-client-v2
+    container_name: corinee_client_v2
     env_file:
       - .env
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - server
     networks:
       - app-network
 
-  mysql:
+  mysql-v2:
     image: mysql:8.0
-    env_file:
-      - .env
+    container_name: corinee_mysql_v2
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_V2}
+      - MYSQL_DATABASE=${MYSQL_DATABASE_V2}
+      - MYSQL_USER=${MYSQL_USER_V2}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD_V2}
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_v2:/var/lib/mysql
     ports:
-      - "3306:3306"  
+      - "3307:3306"
     networks:
       - app-network
 
-  redis:
+  redis-v2:
     image: redis:6
-    env_file:
-      - .env
+    container_name: corinee_redis_v2
     environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD_V2}
     volumes:
-      - redis_data:/data
+      - redis_data_v2:/data
     ports:
-      - "6379:6379"   
+      - "6380:6379"
     networks:
       - app-network
 
 networks:
   app-network:
-    name: corinee_app-network
+    name: corinee_app-network_v2
     driver: bridge
 
 volumes:
-  mysql_data:
-  redis_data:
+  mysql_data_v2:
+  redis_data_v2:
