@@ -11,14 +11,14 @@ services:
       - .env
     environment:
       - DB_HOST=mysql-v2
-      - DB_PORT=3306
+      - DB_PORT=3307
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
       - REDIS_HOST=redis-v2
-      - REDIS_PORT=6379
+      - REDIS_PORT=6380
     ports:
-      - "3002:3000"
+      - "3002:3002"
     depends_on:
       - mysql-v2
       - redis-v2
@@ -36,8 +36,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "8080:8080"
+      - "8443:8443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
