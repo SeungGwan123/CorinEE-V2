@@ -11,12 +11,12 @@ services:
       - .env
     environment:
       - DB_HOST=mysql-v2
-      - DB_PORT=3307
+      - DB_PORT=3306
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
       - REDIS_HOST=redis-v2
-      - REDIS_PORT=6380
+      - REDIS_PORT=6379
     ports:
       - "3002:3002"
     depends_on:
