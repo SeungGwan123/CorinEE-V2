@@ -9,7 +9,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certs:/etc/letsencrypt:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
       - client1_dist:/usr/share/nginx/html/client1:ro
       - client2_dist:/usr/share/nginx/html/client2:ro
     depends_on:
@@ -27,7 +27,8 @@ services:
     image: seunggwan/corinee-client
     container_name: corinee_client_1
     env_file:
-      - ../.env
+      - ./.env
+    command: sh -c "yarn build && cp -r dist/* /usr/share/nginx/html/client1"
     volumes:
       - client1_dist:/usr/share/nginx/html/client1
     networks:
@@ -42,7 +43,8 @@ services:
     image: seunggwan/corinee-client-v2
     container_name: corinee_client_v2
     env_file:
-      - ../.env
+      - ./.env
+    command: sh -c "yarn build && cp -r dist/* /usr/share/nginx/html/client2"
     volumes:
       - client2_dist:/usr/share/nginx/html/client2
     networks:
