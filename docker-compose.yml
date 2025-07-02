@@ -23,28 +23,7 @@ services:
       - mysql-v2
       - redis-v2
     networks:
-      - app-network
-
-  client:
-    build:
-      context: .
-      dockerfile: dockerfile-client-v2
-      args:
-        - VITE_API_BASE_URL=${VITE_API_BASE_URL}
-    image: seunggwan/corinee-client-v2
-    container_name: corinee_client_v2
-    env_file:
-      - .env
-    ports:
-      - "8080:8080"
-      - "8443:8443"
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - server
-    networks:
-      - app-network
+      - corinee_network
 
   mysql-v2:
     image: mysql:8.0
@@ -59,7 +38,7 @@ services:
     ports:
       - "3307:3306"
     networks:
-      - app-network
+      - corinee_network
 
   redis-v2:
     image: redis:6
@@ -71,12 +50,11 @@ services:
     ports:
       - "6380:6379"
     networks:
-      - app-network
+      - corinee_network
 
 networks:
-  app-network:
-    name: corinee_app-network_v2
-    driver: bridge
+  corinee_network:
+    external: true
 
 volumes:
   mysql_data_v2:
