@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          source: "docker-compose.yml,nginx.conf,.env"
+          source: "docker-compose.yml,.env"
           target: /corinee-v2
           overwrite: true
 
@@ -50,6 +50,10 @@ jobs:
           script: |
             cd /corinee-v2
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/corinee-server-v2
+            docker-compose down
+            docker-compose up -d
+            cd ..
+            cd nginx
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/corinee-client-v2
             docker-compose down
             docker-compose up -d

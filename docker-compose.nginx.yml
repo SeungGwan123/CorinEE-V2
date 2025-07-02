@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: corinee_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/letsencrypt:ro
+      - client1_dist:/usr/share/nginx/html/client1:ro
+      - client2_dist:/usr/share/nginx/html/client2:ro
+    depends_on:
+      - client1
+      - client2
+    networks:
+      - corinee_network
+
+  client1:
+    build:
+      context: ../
+      dockerfile: dockerfile-client
+      args:
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL_1}
+    image: seunggwan/corinee-client
+    container_name: corinee_client_1
+    env_file:
+      - ../.env
+    volumes:
+      - client1_dist:/usr/share/nginx/html/client1
+    networks:
+      - corinee_network
+
+  client2:
+    build:
+      context: ../
+      dockerfile: dockerfile-client-v2
+      args:
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL_2}
+    image: seunggwan/corinee-client-v2
+    container_name: corinee_client_v2
+    env_file:
+      - ../.env
+    volumes:
+      - client2_dist:/usr/share/nginx/html/client2
+    networks:
+      - corinee_network
+
+volumes:
+  client1_dist:
+  client2_dist:
+
+networks:
+  corinee_network:
+    external: true
